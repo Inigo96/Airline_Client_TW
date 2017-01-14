@@ -1,11 +1,18 @@
 package gui;
 
+import controller.Controller;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.LineNumberInputStream;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import javax.swing.JSplitPane;
 import javax.swing.JLabel;
@@ -15,6 +22,7 @@ import javax.swing.JTextField;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,7 +30,11 @@ import javax.swing.JTable;
 import entity.Reserva;
 import entity.Vuelo;
 
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame implements ActionListener{
+	
+	private Controller controller;
+	private ArrayList<Vuelo> flightList;
+	private ArrayList<Reserva> reservationList;
 	
 	final int numColumnasVuelos = 3;
 	private JTextField txtUsuario;
@@ -34,13 +46,31 @@ public class MainWindow extends JFrame{
 	private JButton btnReservas;
 	private JButton btnBuscar;
 	private JButton btnLogIn;
+	private JButton btnReservar;
 	
-	public MainWindow() {
+	private JComboBox diaComBox;
+	private JComboBox mesComBox;
+	private JComboBox anyoComBox;
+	
+	
+	public MainWindow(Controller controller){
+		this.controller = controller;
+		initComponents();
+		this.setVisible(true);
+		this.centreWindow();
+	}
+	//TODO HAy que borrar este metodo
+	public MainWindow(){
+		initComponents();
+		this.setVisible(true);
+		this.centreWindow();
+	}
+	
+	public void initComponents(){
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
-		
+			
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(0, 0, 434, 125);
 		getContentPane().add(panel_1);
@@ -80,7 +110,6 @@ public class MainWindow extends JFrame{
 		panel_1.add(panel_3);
 		panel_3.setLayout(null);
 		
-		
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.setBounds(131, 91, 86, 23);
 		
@@ -102,17 +131,17 @@ public class MainWindow extends JFrame{
 		barra.setBounds(62, 58, 23, 14);
 		panel_3.add(barra);
 		
-		JComboBox diaComBox = new JComboBox();
+		diaComBox = new JComboBox();
 		diaComBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		diaComBox.setBounds(10, 55, 42, 20);
 		panel_3.add(diaComBox);
 		
-		JComboBox mesComBox = new JComboBox();
+		mesComBox = new JComboBox();
 		mesComBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
 		mesComBox.setBounds(82, 55, 42, 20);
 		panel_3.add(mesComBox);
 		
-		JComboBox anyoComBox = new JComboBox();
+		anyoComBox = new JComboBox();
 		anyoComBox.setModel(new DefaultComboBoxModel(new String[] {"2017", "2018"}));
 		anyoComBox.setBounds(156, 55, 61, 20);
 		panel_3.add(anyoComBox);
@@ -120,6 +149,10 @@ public class MainWindow extends JFrame{
 		JLabel barra_1 = new JLabel("/");
 		barra_1.setBounds(134, 58, 12, 14);
 		panel_3.add(barra_1);
+		
+		btnReservar = new JButton("Reservar");
+		btnReservar.setBounds(10, 91, 89, 23);
+		panel_3.add(btnReservar);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 125, 444, 136);
@@ -134,6 +167,10 @@ public class MainWindow extends JFrame{
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		btnBuscar.addActionListener(this);
+		btnLogIn.addActionListener(this);
+		btnReservas.addActionListener(this);
 	}
 	
 	public static void main(String[] args) {
@@ -179,23 +216,67 @@ public class MainWindow extends JFrame{
 	
 	
 	public void actionPerformed(ActionEvent e) { 
-		if(e.equals(btnBuscar)){
+		if(e.getSource().equals(btnBuscar)){
 			//TODO conexion con los datos
-			ArrayList<Vuelo> a = new ArrayList<>();
+			flightList = controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar
+					(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(), diaComBox.getSelectedIndex()));
+
+			rellenarTablaVuelos(flightList);
 			
-			rellenarTablaVuelos(a);
-			
-		}else if(e.equals(btnLogIn)){
+		}else if(e.getSource().equals(btnLogIn)){
 			String user = txtUsuario.getText();
 			String pass = txtPass.getText();
-			// TODO Comprobar que el usuario va con la contraseña.
-		}else if(e.equals(btnReservas)){
-			//TODO conexion con los datos
-			ArrayList<Reserva> a = new ArrayList<>();
+			// Comprueba que el usuario va con la contraseña.
+			if(controller.login(user, pass)){
+				txtUsuario.setEditable(false);
+				txtPass.setEditable(false);
+				this.setTitle("Log in correct");
+				try{wait(3000);}catch(InterruptedException exception){
+					exception.printStackTrace();
+				}
+				this.setTitle("");
+				
+			}else{
+				this.setTitle("Error in Log in");
+				try{wait(3000);}catch(InterruptedException exception){
+					exception.printStackTrace();
+				}
+				this.setTitle("");
+			}
 			
-			rellenarTablaReservas(a);
+		}else if(e.getSource().equals(btnReservas)){
+			// Conseguir las reservas en funcion del User
+			User u = new User(txtUsuario.getText(), txtPass.getText());
+			reservationList = controller.getAllReservations(u);
+			rellenarTablaReservas(reservationList);
+			
+		}else if(e.getSource().equals(btnReservar)){
+			// Crear reserva
+			int numVuelo = table.getSelectedRow();
+			Flight flight  = flightList.get(numVuelo);
+			
+			// Comprueba si la reserva se ha  completado
+			if(controller.bookFlight(flight)){
+				this.setTitle("Book correct");
+				try{wait(3000);}catch(InterruptedException exception){
+					exception.printStackTrace();
+				}
+				this.setTitle("");
+				
+			}else{
+				this.setTitle("Error in Booking");
+				try{wait(3000);}catch(InterruptedException exception){
+					exception.printStackTrace();
+				}
+				this.setTitle("");
+			}
+			
 		}
 	}
 	
-	
+	public void centreWindow() {
+		Dimension dim = getToolkit().getScreenSize();
+		Rectangle abounds = getBounds();
+		setLocation((dim.width - abounds.width) / 2, (dim.height - abounds.height) / 2);
+	}
 }
