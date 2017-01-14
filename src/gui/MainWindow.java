@@ -27,14 +27,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import entity.Reserva;
-import entity.Vuelo;
-
 public class MainWindow extends JFrame implements ActionListener{
 	
 	private Controller controller;
-	private ArrayList<Vuelo> flightList;
-	private ArrayList<Reserva> reservationList;
+	private ArrayList<Flight> flightList;
+	private ArrayList<Reservation> reservationList;
 	
 	final int numColumnasVuelos = 3;
 	private JTextField txtUsuario;
@@ -179,12 +176,12 @@ public class MainWindow extends JFrame implements ActionListener{
 		a.setVisible(true);
 	}
 	
-	private JTable rellenarTablaVuelos(ArrayList<Vuelo> a){
+	private JTable rellenarTablaVuelos(ArrayList<Flight> a){
 		JTable tabla;
 		String[] columnas = {"Departure", "Arrival", "Date"};
 		String[][] datos = new String [a.size()/numColumnasVuelos][numColumnasVuelos];
 		for(int i = 0; i< a.size(); i++){
-				Vuelo v =  a.get(i);
+				Flight v =  a.get(i);
 				datos[i][1] = v.getArrival();
 				datos[i][2] = v.getDeparture();
 				datos[i][3] = v.getDate().toString();							
@@ -193,19 +190,19 @@ public class MainWindow extends JFrame implements ActionListener{
 		return tabla;
 	}
 	
-	private JTable rellenarTablaReservas(ArrayList<Reserva> a){
+	private JTable rellenarTablaReservas(ArrayList<Reservation> a){
 		JTable tabla;
 		String[] columnas = {"Reservation number", "Flights"};
 		String[][] datos = new String [a.size()/2][2];
 		for(int i = 0; i< a.size(); i++){
-				Reserva v =  a.get(i);
-				datos[i][0] = v.getId();
-				String vuelos = "";
-				for(int j = 0; j<v.getFlightList().size(); j++){
-					if(j == v.getFlightList().size()-1){
-						vuelos.concat(v.getFlightList().get(j).toString());
+				Reservation r =  a.get(i);
+				datos[i][0] = r.getId();
+				String reservations = "";
+				for(int j = 0; j<r.getReservationList().size(); j++){
+					if(j == r.getReservationList().size()-1){
+						reservations.concat(r.getReservationList().get(j).toString());
 					}else{
-						vuelos.concat(v.getFlightList().get(j).toString() + ", ");
+						reservations.concat(r.getReservationList().get(j).toString() + ", ");
 					}
 				}
 				
