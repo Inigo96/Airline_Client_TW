@@ -1,22 +1,42 @@
 package controller;
 
+import gui.GUI;
+import remote.Service_Locator;
+import gui.GUI;
+
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import es.deusto.ingenieria.sd.sms.client.gui.SMSWindow;
-import es.deusto.ingenieria.sd.sms.client.remote.RMIServiceLocator;
-import es.deusto.ingenieria.sd.sms.server.data.dto.TVProgramDTO;
-
+/**
+ * Created by inigo on 21/11/16.
+ */
 public class Controller {
 
-	private RMIServiceLocator rsl;
+	private Service_Locator rsl;
 
 	public Controller(String[] args) throws RemoteException {
-		rsl = new RMIServiceLocator();
-		rsl.setService(args);
-		new SMSWindow(this);
+		rsl = new Service_Locator();
+		rsl.setService(args[0], args[1], args[2]);
+		new GUI(this);
 	}
 
+	boolean login(String u,String p){
 
+	}
+
+	boolean register(User u){
+
+	}
+
+	boolean editProfile(User u){
+
+	}
+
+	Flight[] searchFlight(String departureA, String arrivalA, Date date){
+
+	}
+
+	boolean bookFlight(Flight flight){
+
+	}
 }

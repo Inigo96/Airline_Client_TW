@@ -1,26 +1,22 @@
 package remote;
 
-import es.deusto.ingenieria.sd.sms.server.remote.ITVProgramAdmin;
-import es.deusto.ingenieria.sd.sms.server.remote.ITVProgramReceiver;
+/**
+ * Created by inigo on 21/11/16.
+ */
+public class Service_Locator {
 
-public class RMIServiceLocator{
-	// The Cache
-	private IReservationService reservationService;
+    public IFlightManager service;
 
-    public void setService(String[] args) {
-    	
-    	// Add your code to get the TARGET reference HERE
-        try {
-            String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-            this.reservationService = (IReservationService) java.rmi.Naming.lookup(name);
-
+    public void setService(String ip, String puerto, String nombre) {
+        try{
+            String namePaymentS = "//" + ip + ":" + puerto +"/" + nombre;
+            service = (IFlightManager) java.rmi.Naming.lookup(namePaymentS);
         }catch (Exception e){
-            //System.out.println("//" + args[0] + ":" + args[1] + "/" + args[2]);
+
         }
     }
 
-    public IReservationService getIReservationService() {
-    	return IReservationService;
+    public IFlightManager getService(){
+        return service;
     }
-
 }
