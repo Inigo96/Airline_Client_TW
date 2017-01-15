@@ -1,8 +1,8 @@
 package controller;
 
-import gui.GUI;
-import remote.Service_Locator;
-import gui.GUI;
+import entities.*;
+import remote.RMIServiceLocator;
+import gui.MainWindow;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -12,10 +12,10 @@ import java.util.Date;
  */
 public class Controller {
 
-	private Service_Locator rsl;
+	private RMIServiceLocator rsl;
 
 	public Controller(String[] args) throws RemoteException {
-		rsl = new Service_Locator();
+		rsl = new RMIServiceLocator();
 		rsl.setService(args[0], args[1], args[2]);
 		new GUI(this);
 	}

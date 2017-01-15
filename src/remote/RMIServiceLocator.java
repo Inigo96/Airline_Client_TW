@@ -3,7 +3,7 @@ package remote;
 /**
  * Created by inigo on 21/11/16.
  */
-public class Service_Locator {
+public class RMIServiceLocator {
 
     public IFlightManager service;
 
