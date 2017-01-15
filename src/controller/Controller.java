@@ -17,7 +17,7 @@ public class Controller {
 	public Controller(String[] args) throws RemoteException {
 		rsl = new RMIServiceLocator();
 		rsl.setService(args[0], args[1], args[2]);
-		new GUI(this);
+		new MainWindow(this);
 	}
 
 	boolean login(String u,String p){
