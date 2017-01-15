@@ -35,6 +35,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	private ArrayList<Flight> flightList;
 	private ArrayList<Reservation> reservationList;
 
+
 	final int numColumnasVuelos = 3;
 	private JTextField txtUsuario;
 	private JTextField txtPass;
@@ -186,7 +187,7 @@ public class MainWindow extends JFrame implements ActionListener{
 				Flight v =  a.get(i);
 				datos[i][1] = v.getArrivalA();
 				datos[i][2] = v.getDepartureA();
-				datos[i][3] = v.getDate().toString();
+				datos[i][3] = gregorianToString(v.getDate());
 		}
 		tabla = new JTable(datos, columnas);
 		return tabla;
@@ -214,14 +215,14 @@ public class MainWindow extends JFrame implements ActionListener{
 		*/
 		JTable tabla;
 		String[] columnas = {"Reservation number", "Flights"};
-		String[] datos= new  String[a.size()*3];
+		String[][]datos= new  String[a.size()/numColumnasVuelos][numColumnasVuelos];
 		Reservation[] reservas=(Reservation[]) a.toArray();
 		for(int i=0;i<a.size();i++){
 			Flight f;
 			f=reservas[i].getFlight();
-			datos[i]=f.getArrivalA();
-			datos[i+1]=f.getDepartureA();
-			datos[i+2]=gregorianToString(f.getDate());
+			datos[i][1]=f.getArrivalA();
+			datos[i][2]=f.getDepartureA();
+			datos[i][3]=gregorianToString(f.getDate());
 
 		}
 		tabla = new JTable(datos, columnas);
@@ -233,9 +234,12 @@ public class MainWindow extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(btnBuscar)){
 			//TODO conexion con los datos
-			flightList = controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar
+
+			 Flight[] vuelos= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar
 					(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(), diaComBox.getSelectedIndex()));
-			flightList=controller.
+			for(int i=0;i<vuelos.length;i++){
+			 flightList.add(vuelos[i]);
+			}
 			rellenarTablaVuelos(flightList);
 
 		}else if(e.getSource().equals(btnLogIn)){
