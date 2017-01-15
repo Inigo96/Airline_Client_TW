@@ -6,6 +6,7 @@ import gui.MainWindow;
 
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by inigo on 21/11/16.
@@ -30,7 +31,7 @@ public class Controller {
 	}
 
 
-	public Flight[] searchFlight(String departureA, String arrivalA, Date date){
+	public Flight[] searchFlight(String departureA, String arrivalA, GregorianCalendar date){
 		try {
 			return this.rsl.getService().searchFlight(departureA,arrivalA,date);
 		} catch (RemoteException e) {
@@ -39,7 +40,7 @@ public class Controller {
 		}
 	}
 
-	public Reservation[] getReservations(User u) throws RemoteException{
+	public Reservation[] getReservations(User u){
 		try {
 			return this.rsl.getService().getReservations(u);
 		} catch (RemoteException e) {
@@ -48,7 +49,7 @@ public class Controller {
 		}
 	}
 
-	public boolean createReservation(Flight f, User u) throws RemoteException{
+	public boolean createReservation(Flight f, User u){
 		try {
 			return this.rsl.getService().createReservation(f,u);
 		} catch (RemoteException e) {

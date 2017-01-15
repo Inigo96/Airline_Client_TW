@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.LineNumberInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.JSplitPane;
@@ -216,11 +217,16 @@ public class MainWindow extends JFrame implements ActionListener{
 		String[] datos= new  String[a.size()*3];
 		Reservation[] reservas=(Reservation[]) a.toArray();
 		for(int i=0;i<a.size();i++){
-			Flight f= new Flight();
+			Flight f;
 			f=reservas[i].getFlight();
-			datos[i]=;
+			datos[i]=f.getArrivalA();
+			datos[i+1]=f.getDepartureA();
+			datos[i+2]=gregorianToString(f.getDate());
 
 		}
+		tabla = new JTable(datos, columnas);
+		return tabla;
+
 	}
 
 
@@ -229,14 +235,14 @@ public class MainWindow extends JFrame implements ActionListener{
 			//TODO conexion con los datos
 			flightList = controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar
 					(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(), diaComBox.getSelectedIndex()));
-
+			flightList=controller.
 			rellenarTablaVuelos(flightList);
 
 		}else if(e.getSource().equals(btnLogIn)){
 			String user = txtUsuario.getText();
 			String pass = txtPass.getText();
 			// Comprueba que el usuario va con la contraseña.
-			if(controller.login(user, pass)){
+			if(controller.login(user, pass)!=null){
 				txtUsuario.setEditable(false);
 				txtPass.setEditable(false);
 				this.setTitle("Log in correct");
@@ -256,7 +262,10 @@ public class MainWindow extends JFrame implements ActionListener{
 		}else if(e.getSource().equals(btnReservas)){
 			// Conseguir las reservas en funcion del User
 			User u = new User(txtUsuario.getText(), txtPass.getText());
-			reservationList = controller.getAllReservations(u);
+			for(int i=0; i<controller.getReservations(u).length;i++){
+				reservationList.add(controller.getReservations(u)[i]);
+			}
+
 			rellenarTablaReservas(reservationList);
 
 		}else if(e.getSource().equals(btnReservar)){
@@ -273,5 +282,13 @@ public class MainWindow extends JFrame implements ActionListener{
 		Dimension dim = getToolkit().getScreenSize();
 		Rectangle abounds = getBounds();
 		setLocation((dim.width - abounds.width) / 2, (dim.height - abounds.height) / 2);
+	}
+	public String gregorianToString(GregorianCalendar calendar){
+
+		int year =calendar.get(Calendar.YEAR);
+		int month= calendar.get(Calendar.MONTH)+1;
+		int day=calendar.get(Calendar.DAY_OF_MONTH);
+
+		return Integer.toString(day)+"-"+Integer.toString(month)+"-"+Integer.toString(year);
 	}
 }
