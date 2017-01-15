@@ -14,29 +14,46 @@ public class Controller {
 
 	private RMIServiceLocator rsl;
 
-	public Controller(String[] args) throws RemoteException {
+	public Controller(String ip, String port, String serviceName) throws RemoteException {
 		rsl = new RMIServiceLocator();
-		rsl.setService(args[0], args[1], args[2]);
+		rsl.setService(ip, port, serviceName);
 		new MainWindow(this);
 	}
 
-	boolean login(String u,String p){
-
+	public User login(String u,String p){
+		try {
+			return this.rsl.getService().login(u,p);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	boolean register(User u){
 
+	public Flight[] searchFlight(String departureA, String arrivalA, Date date){
+		try {
+			return this.rsl.getService().searchFlight(departureA,arrivalA,date);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	boolean editProfile(User u){
-
+	public Reservation[] getReservations(User u) throws RemoteException{
+		try {
+			return this.rsl.getService().getReservations(u);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	Flight[] searchFlight(String departureA, String arrivalA, Date date){
-
-	}
-
-	boolean bookFlight(Flight flight){
-
+	public boolean createReservation(Flight f, User u) throws RemoteException{
+		try {
+			return this.rsl.getService().createReservation(f,u);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
