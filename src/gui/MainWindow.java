@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.LineNumberInputStream;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ import javax.swing.JTable;
 public class MainWindow extends JFrame implements ActionListener{
 
 	private Controller controller;
+	private User user;
 	private ArrayList<Flight> flightList;
 	private ArrayList<Reservation> reservationList;
 
@@ -167,12 +169,6 @@ public class MainWindow extends JFrame implements ActionListener{
 		btnReservas.addActionListener(this);
 	}
 
-	public static void main(String[] args) {
-		MainWindow a = new MainWindow();
-		a.setSize(new Dimension(448, 287));
-		a.setVisible(true);
-	}
-
 	private JTable rellenarTablaVuelos(ArrayList<Flight> a){
 		JTable tabla;
 		String[] columnas = {"Departure", "Arrival", "Date"};
@@ -206,20 +202,18 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
 	public void actionPerformed(ActionEvent e) {
+		user = controller.login(txtUsuario.getText(), txtPass.getText());
 		if(e.getSource().equals(btnBuscar)){
 			// conexion con los datos
-			 Flight[] vuelos= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
+			flightList= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
 					 diaComBox.getSelectedIndex()));
-			for(int i=0;i<vuelos.length;i++){
-			 flightList.add(vuelos[i]);
-			}
 			rellenarTablaVuelos(flightList);
 
 		}else if(e.getSource().equals(btnLogIn)){
 			String user = txtUsuario.getText();
 			String pass = txtPass.getText();
-			// Comprueba que el usuario va con la contrasena.
-			if(controller.login(user, pass)!=null){
+			// Comprueba que el usuario va con la contraseña.
+			if(user!=null){
 				txtUsuario.setEditable(false);
 				txtPass.setEditable(false);
 				this.setTitle("Log in correct");
@@ -238,14 +232,14 @@ public class MainWindow extends JFrame implements ActionListener{
 
 		}else if(e.getSource().equals(btnReservas)){
 			// Conseguir las reservas en funcion del User
-			User u = new User(txtUsuario.getText(), txtPass.getText());
-			reservationList = controller.getReservations(u);
+			reservationList = controller.getReservations(user);
 			rellenarTablaReservas(reservationList);
 
 		}else if(e.getSource().equals(btnReservar)){
 			// Crear reserva
 			int numVuelo = table.getSelectedRow();
 			Flight flight  = flightList.get(numVuelo);
+			controller.createReservation(flight, user);
 
 		}
 	}
