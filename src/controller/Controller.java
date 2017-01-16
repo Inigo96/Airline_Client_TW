@@ -60,8 +60,13 @@ public class Controller {
 	}
 	
 	public ArrayList<Object> array2ArrayList(Object[] a){
-		ArrayList<Object> ar= new ArrayList<>();
-		for (Object j:a) ar.add(j);
+		if(a[0] instanceof Flight){
+			ArrayList<Flight> ar= new ArrayList<>();
+			for (Flight j:a) ar.add(j);
+		}else if(a[0] instanceof Reservation){
+			ArrayList<Reservation> ar= new ArrayList<>();
+			for (Reservation j:a) ar.add(j);
+		}	
 		return ar;
 	}
 
