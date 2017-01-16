@@ -22,12 +22,6 @@ public class Controller {
 		new MainWindow(this);
 	}
 
-	public ArrayList<Object> array2ArrayList(Object[] a){
-		ArrayList<Object> ar= new ArrayList<>();
-		for (Object j:a) ar.add(j);
-		return ar;
-	}
-
 	public User login(String u,String p){
 		try {
 			return this.rsl.getService().login(u,p);
@@ -38,18 +32,18 @@ public class Controller {
 	}
 
 
-	public Flight[] searchFlight(String departureA, String arrivalA, GregorianCalendar date){
+	public ArrayList<Flight> searchFlight(String departureA, String arrivalA, GregorianCalendar date){
 		try {
-			return this.rsl.getService().searchFlight(departureA,arrivalA,date);
+			return array2ArrayList(this.rsl.getService().searchFlight(departureA,arrivalA,date));
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public Reservation[] getReservations(User u){
+	public ArrayList<Reservation> getReservations(User u){
 		try {
-			return this.rsl.getService().getReservations(u);
+			return array2ArrayList(this.rsl.getService().getReservations(u));
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
@@ -64,4 +58,11 @@ public class Controller {
 			return false;
 		}
 	}
+	
+	public ArrayList<Object> array2ArrayList(Object[] a){
+		ArrayList<Object> ar= new ArrayList<>();
+		for (Object j:a) ar.add(j);
+		return ar;
+	}
+
 }
