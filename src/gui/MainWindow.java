@@ -59,12 +59,6 @@ public class MainWindow extends JFrame implements ActionListener{
 		this.setVisible(true);
 		this.centreWindow();
 	}
-	//TODO HAy que borrar este metodo
-	public MainWindow(){
-		initComponents();
-		this.setVisible(true);
-		this.centreWindow();
-	}
 
 	public void initComponents(){
 		setResizable(false);
@@ -194,25 +188,6 @@ public class MainWindow extends JFrame implements ActionListener{
 	}
 
 	private JTable rellenarTablaReservas(ArrayList<Reservation> a){
-		/*JTable tabla;
-		String[] columnas = {"Reservation number", "Flights"};
-		String[][] datos = new String [a.size()/2][2];
-		for(int i = 0; i< a.size(); i++){
-				Reservation r =  a.get(i);
-				datos[i][0] = r.getId();
-				String reservations = "";
-				for(int j = 0; j<r.getReservationList().size(); j++){
-					if(j == r.getReservationList().size()-1){
-						reservations.concat(r.getReservationList().get(j).toString());
-					}else{
-						reservations.concat(r.getReservationList().get(j).toString() + ", ");
-					}
-				}
-
-		}
-		tabla = new JTable(datos, columnas);
-		return tabla;
-		*/
 		JTable tabla;
 		String[] columnas = {"Reservation number", "Flights"};
 		String[][]datos= new  String[a.size()/numColumnasVuelos][numColumnasVuelos];
@@ -220,8 +195,8 @@ public class MainWindow extends JFrame implements ActionListener{
 		for(int i=0;i<a.size();i++){
 			Flight f;
 			f=reservas[i].getFlight();
-			datos[i][0] = i;
-			datos[i][1]=f.getArrivalA() + ", " + f.getDepartureA() + ", " + gregorianToString(f.getDate());
+			datos[i][0] = i + "";
+			datos[i][1]=f.toString();
 
 		}
 		tabla = new JTable(datos, columnas);
@@ -232,10 +207,9 @@ public class MainWindow extends JFrame implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(btnBuscar)){
-			//TODO conexion con los datos
-
-			 Flight[] vuelos= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar
-					(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(), diaComBox.getSelectedIndex()));
+			// conexion con los datos
+			 Flight[] vuelos= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
+					 diaComBox.getSelectedIndex()));
 			for(int i=0;i<vuelos.length;i++){
 			 flightList.add(vuelos[i]);
 			}
@@ -244,7 +218,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		}else if(e.getSource().equals(btnLogIn)){
 			String user = txtUsuario.getText();
 			String pass = txtPass.getText();
-			// Comprueba que el usuario va con la contraseÃ±a.
+			// Comprueba que el usuario va con la contraseña.
 			if(controller.login(user, pass)!=null){
 				txtUsuario.setEditable(false);
 				txtPass.setEditable(false);
@@ -265,18 +239,13 @@ public class MainWindow extends JFrame implements ActionListener{
 		}else if(e.getSource().equals(btnReservas)){
 			// Conseguir las reservas en funcion del User
 			User u = new User(txtUsuario.getText(), txtPass.getText());
-			for(int i=0; i<controller.getReservations(u).length;i++){
-				reservationList.add(controller.getReservations(u)[i]);
-			}
-
+			reservationList = controller.getReservations(u);
 			rellenarTablaReservas(reservationList);
 
 		}else if(e.getSource().equals(btnReservar)){
 			// Crear reserva
 			int numVuelo = table.getSelectedRow();
 			Flight flight  = flightList.get(numVuelo);
-
-
 
 		}
 	}
