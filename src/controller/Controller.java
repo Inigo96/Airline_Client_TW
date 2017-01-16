@@ -5,6 +5,7 @@ import remote.RMIServiceLocator;
 import gui.MainWindow;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -19,6 +20,12 @@ public class Controller {
 		rsl = new RMIServiceLocator();
 		rsl.setService(ip, port, serviceName);
 		new MainWindow(this);
+	}
+
+	public ArrayList<Object> array2ArrayList(Object[] a){
+		ArrayList<Object> ar= new ArrayList<>();
+		for (Object j:a) ar.add(j);
+		return ar;
 	}
 
 	public User login(String u,String p){
