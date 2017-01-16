@@ -185,9 +185,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		String[][] datos = new String [a.size()/numColumnasVuelos][numColumnasVuelos];
 		for(int i = 0; i< a.size(); i++){
 				Flight v =  a.get(i);
-				datos[i][1] = v.getArrivalA();
-				datos[i][2] = v.getDepartureA();
-				datos[i][3] = gregorianToString(v.getDate());
+				datos[i][0] = v.getArrivalA();
+				datos[i][1] = v.getDepartureA();
+				datos[i][2] = gregorianToString(v.getDate());
 		}
 		tabla = new JTable(datos, columnas);
 		return tabla;
@@ -220,9 +220,8 @@ public class MainWindow extends JFrame implements ActionListener{
 		for(int i=0;i<a.size();i++){
 			Flight f;
 			f=reservas[i].getFlight();
-			datos[i][1]=f.getArrivalA();
-			datos[i][2]=f.getDepartureA();
-			datos[i][3]=gregorianToString(f.getDate());
+			datos[i][0] = i;
+			datos[i][1]=f.getArrivalA() + ", " + f.getDepartureA() + ", " + gregorianToString(f.getDate());
 
 		}
 		tabla = new JTable(datos, columnas);
