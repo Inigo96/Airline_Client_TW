@@ -1,7 +1,9 @@
 package gui;
 
 import controller.Controller;
-import entities.*;
+import entities.FlightDTO;
+import entities.UserDTO;
+import entities.ReservationDTO;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,9 +35,9 @@ import javax.swing.JTable;
 public class MainWindow extends JFrame implements ActionListener{
 
 	private Controller controller;
-	private User user;
-	private ArrayList<Flight> flightList;
-	private ArrayList<Reservation> reservationList;
+	private UserDTO user;
+	private ArrayList<FlightDTO> flightList;
+	private ArrayList<ReservationDTO> reservationList;
 
 
 	final int numColumnasVuelos = 3;
@@ -169,12 +171,12 @@ public class MainWindow extends JFrame implements ActionListener{
 		btnReservas.addActionListener(this);
 	}
 
-	private JTable rellenarTablaVuelos(ArrayList<Flight> a){
+	private JTable rellenarTablaVuelos(ArrayList<FlightDTO> a){
 		JTable tabla;
 		String[] columnas = {"Departure", "Arrival", "Date"};
 		String[][] datos = new String [a.size()/numColumnasVuelos][numColumnasVuelos];
 		for(int i = 0; i< a.size(); i++){
-				Flight v =  a.get(i);
+				FlightDTO v =  a.get(i);
 				datos[i][0] = v.getArrivalA();
 				datos[i][1] = v.getDepartureA();
 				datos[i][2] = gregorianToString(v.getDate());
@@ -183,13 +185,13 @@ public class MainWindow extends JFrame implements ActionListener{
 		return tabla;
 	}
 
-	private JTable rellenarTablaReservas(ArrayList<Reservation> a){
+	private JTable rellenarTablaReservas(ArrayList<ReservationDTO> a){
 		JTable tabla;
 		String[] columnas = {"Reservation number", "Flights"};
 		String[][]datos= new  String[a.size()/numColumnasVuelos][numColumnasVuelos];
-		Reservation[] reservas=(Reservation[]) a.toArray();
+		ReservationDTO[] reservas=(ReservationDTO[]) a.toArray();
 		for(int i=0;i<a.size();i++){
-			Flight f;
+			FlightDTO f;
 			f=reservas[i].getFlight();
 			datos[i][0] = i + "";
 			datos[i][1]=f.toString();
@@ -207,10 +209,12 @@ public class MainWindow extends JFrame implements ActionListener{
 			// conexion con los datos
 			flightList= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
 					 diaComBox.getSelectedIndex()));
+			System.out.println("flightList = " + flightList);
+			System.out.println("flightList = " + flightList.size());
 			rellenarTablaVuelos(flightList);
 
 		}else if(e.getSource().equals(btnLogIn)){
-			String user = txtUsuario.getText();
+			String email = txtUsuario.getText();
 			String pass = txtPass.getText();
 			// Comprueba que el usuario va con la contrasena.
 			if(user!=null){
@@ -238,7 +242,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		}else if(e.getSource().equals(btnReservar)){
 			// Crear reserva
 			int numVuelo = table.getSelectedRow();
-			Flight flight  = flightList.get(numVuelo);
+			FlightDTO flight  = flightList.get(numVuelo);
 			controller.createReservation(flight, user);
 
 		}

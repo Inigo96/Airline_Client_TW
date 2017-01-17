@@ -22,7 +22,7 @@ public class Controller {
 		new MainWindow(this);
 	}
 
-	public User login(String u,String p){
+	public synchronized UserDTO login(String u,String p){
 		try {
 			return this.rsl.getService().login(u,p);
 		} catch (RemoteException e) {
@@ -32,7 +32,7 @@ public class Controller {
 	}
 
 
-	public ArrayList<Flight> searchFlight(String departureA, String arrivalA, GregorianCalendar date){
+	public synchronized ArrayList<FlightDTO> searchFlight(String departureA, String arrivalA, GregorianCalendar date){
 		try {
 			return flightarray2ArrayList(this.rsl.getService().searchFlight(departureA,arrivalA,date));
 		} catch (RemoteException e) {
@@ -41,7 +41,7 @@ public class Controller {
 		}
 	}
 
-	public ArrayList<Reservation> getReservations(User u){
+	public synchronized ArrayList<ReservationDTO> getReservations(UserDTO u){
 		try {
 			return reservationarray2ArrayList(this.rsl.getService().getReservations(u));
 		} catch (RemoteException e) {
@@ -50,7 +50,7 @@ public class Controller {
 		}
 	}
 
-	public boolean createReservation(Flight f, User u){
+	public synchronized boolean createReservation(FlightDTO f, UserDTO u){
 		try {
 			return this.rsl.getService().createReservation(f,u);
 		} catch (RemoteException e) {
@@ -70,15 +70,15 @@ public class Controller {
 //		return ar;
 //	}
 
-	public ArrayList<Flight> flightarray2ArrayList(Flight[] a){
-		ArrayList<Flight> fl = new ArrayList<>();
-		for (Flight j:a) fl.add(j);
+	public synchronized ArrayList<FlightDTO> flightarray2ArrayList(FlightDTO[] a){
+		ArrayList<FlightDTO> fl = new ArrayList<>();
+		for (FlightDTO j:a) fl.add(j);
 		return fl;
 	}
 
-	public ArrayList<Reservation> reservationarray2ArrayList(Reservation[] a){
-		ArrayList<Reservation> fl = new ArrayList<>();
-		for (Reservation j:a) fl.add(j);
+	public synchronized ArrayList<ReservationDTO> reservationarray2ArrayList(ReservationDTO[] a){
+		ArrayList<ReservationDTO> fl = new ArrayList<>();
+		for (ReservationDTO j:a) fl.add(j);
 		return fl;
 	}
 
