@@ -63,10 +63,10 @@ public class MainWindow extends JFrame implements ActionListener{
 	}
 
 	public void initComponents(){
-		setResizable(false);
-		getContentPane().setLayout(null);
+		setResizable(true);
+//		getContentPane().setLayout(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+		this.setSize(700,700);
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(0, 0, 434, 125);
 		getContentPane().add(panel_1);
@@ -99,7 +99,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		panel_2.add(lblContrasea);
 
 		btnReservas = new JButton("Reservas");
-		btnReservas.setBounds(20, 91, 89, 23);
+		btnReservas.setBounds(20, 91, 99, 23);
 		panel_2.add(btnReservas);
 
 		JPanel panel_3 = new JPanel();
@@ -147,7 +147,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		panel_3.add(barra_1);
 
 		btnReservar = new JButton("Reservar");
-		btnReservar.setBounds(10, 91, 89, 23);
+		btnReservar.setBounds(10, 91, 100, 23);
 		panel_3.add(btnReservar);
 
 		JPanel panel = new JPanel();
