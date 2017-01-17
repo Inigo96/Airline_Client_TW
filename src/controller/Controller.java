@@ -34,7 +34,7 @@ public class Controller {
 
 	public ArrayList<Flight> searchFlight(String departureA, String arrivalA, GregorianCalendar date){
 		try {
-			return array2ArrayList(this.rsl.getService().searchFlight(departureA,arrivalA,date));
+			return flightarray2ArrayList(this.rsl.getService().searchFlight(departureA,arrivalA,date));
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
@@ -43,7 +43,7 @@ public class Controller {
 
 	public ArrayList<Reservation> getReservations(User u){
 		try {
-			return array2ArrayList(this.rsl.getService().getReservations(u));
+			return reservationarray2ArrayList(this.rsl.getService().getReservations(u));
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
@@ -59,15 +59,30 @@ public class Controller {
 		}
 	}
 	
-	public ArrayList<Object> array2ArrayList(Object[] a){
-		if(a[0] instanceof Flight){
-			ArrayList<Flight> ar= new ArrayList<>();
-			for (Flight j:a) ar.add(j);
-		}else if(a[0] instanceof Reservation){
-			ArrayList<Reservation> ar= new ArrayList<>();
-			for (Reservation j:a) ar.add(j);
-		}	
-		return ar;
+//	public ArrayList<Object> array2ArrayList(Object[] a){
+//		if(a[0] instanceof Flight){
+//			ArrayList<Flight> ar= new ArrayList<>();
+//			for (Flight j:a) ar.add(j);
+//		}else if(a[0] instanceof Reservation){
+//			ArrayList<Reservation> ar= new ArrayList<>();
+//			for (Reservation j:a) ar.add(j);
+//		}
+//		return ar;
+//	}
+
+	public ArrayList<Flight> flightarray2ArrayList(Flight[] a){
+		ArrayList<Flight> fl = new ArrayList<>();
+		for (Flight j:a) fl.add(j);
+		return fl;
 	}
 
+	public ArrayList<Reservation> reservationarray2ArrayList(Reservation[] a){
+		ArrayList<Reservation> fl = new ArrayList<>();
+		for (Reservation j:a) fl.add(j);
+		return fl;
+	}
+
+	public static void main(String[] args) throws RemoteException {
+		Controller controller=new Controller(args[0],args[1],args[2]);
+	}
 }

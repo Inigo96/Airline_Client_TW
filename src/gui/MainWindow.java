@@ -212,7 +212,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		}else if(e.getSource().equals(btnLogIn)){
 			String user = txtUsuario.getText();
 			String pass = txtPass.getText();
-			// Comprueba que el usuario va con la contraseña.
+			// Comprueba que el usuario va con la contrasena.
 			if(user!=null){
 				txtUsuario.setEditable(false);
 				txtPass.setEditable(false);
