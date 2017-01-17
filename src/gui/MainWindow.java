@@ -1,5 +1,7 @@
 package gui;
 
+
+
 import controller.Controller;
 import entities.FlightDTO;
 import entities.UserDTO;
@@ -33,6 +35,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 public class MainWindow extends JFrame implements ActionListener{
+
+	private final Object lock = new Object();
 
 	private Controller controller;
 	private UserDTO user;
@@ -214,6 +218,7 @@ public class MainWindow extends JFrame implements ActionListener{
 			try {
 				this.wait();
 			} catch (InterruptedException e1) {
+				System.out.println("MECAAAAAAAAAAAAAAAAA!!!!!!!!!!!1");
 				e1.printStackTrace();
 			}
 			rellenarTablaVuelos(flightList);
