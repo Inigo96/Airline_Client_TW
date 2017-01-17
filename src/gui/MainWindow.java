@@ -211,6 +211,11 @@ public class MainWindow extends JFrame implements ActionListener{
 					 diaComBox.getSelectedIndex()));
 			System.out.println("flightList = " + flightList);
 			System.out.println("flightList = " + flightList.size());
+			try {
+				this.wait();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 			rellenarTablaVuelos(flightList);
 
 		}else if(e.getSource().equals(btnLogIn)){
