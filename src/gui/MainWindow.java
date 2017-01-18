@@ -33,6 +33,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.text.StringContent;
+
 
 public class MainWindow extends JFrame implements ActionListener{
 
@@ -43,7 +45,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	private ArrayList<FlightDTO> flightList;
 	private ArrayList<ReservationDTO> reservationList;
 
-
+	private JScrollPane scrollPane;
 	final int numColumnasVuelos = 3;
 	private JTextField txtUsuario;
 	private JTextField txtPass;
@@ -164,10 +166,13 @@ public class MainWindow extends JFrame implements ActionListener{
 		JLabel lblResultados = new JLabel("  Resultados");
 		panel.add(lblResultados, BorderLayout.NORTH);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		panel.add(scrollPane, BorderLayout.CENTER);
 
-		table = new JTable();
+//		table = new JTable();
+		scrollPane.setVisible(true);
+//		table.setVisible(true);
+
 		scrollPane.setViewportView(table);
 
 		btnBuscar.addActionListener(this);
@@ -178,7 +183,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	private JTable rellenarTablaVuelos(ArrayList<FlightDTO> a){
 		JTable tabla;
 		String[] columnas = {"Departure", "Arrival", "Date"};
-		String[][] datos = new String [a.size()/numColumnasVuelos][numColumnasVuelos];
+		String[][] datos = new String [a.size()][numColumnasVuelos];
 		for(int i = 0; i< a.size(); i++){
 				FlightDTO v =  a.get(i);
 				datos[i][0] = v.getArrivalA();
@@ -192,12 +197,12 @@ public class MainWindow extends JFrame implements ActionListener{
 	private JTable rellenarTablaReservas(ArrayList<ReservationDTO> a){
 		JTable tabla;
 		String[] columnas = {"Reservation number", "Flights"};
-		String[][]datos= new  String[a.size()/numColumnasVuelos][numColumnasVuelos];
+		String[][]datos= new  String[a.size()][numColumnasVuelos];
 		ReservationDTO[] reservas=(ReservationDTO[]) a.toArray();
 		for(int i=0;i<a.size();i++){
 			FlightDTO f;
 			f=reservas[i].getFlight();
-			datos[i][0] = i + "";
+			datos[i][0] = Integer.toString(i);
 			datos[i][1]=f.toString();
 
 		}
@@ -213,15 +218,13 @@ public class MainWindow extends JFrame implements ActionListener{
 			// conexion con los datos
 			flightList= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
 					 diaComBox.getSelectedIndex()));
+
 			System.out.println("flightList = " + flightList);
 			System.out.println("flightList = " + flightList.size());
-			try {
-				this.wait();
-			} catch (InterruptedException e1) {
-				System.out.println("MECAAAAAAAAAAAAAAAAA!!!!!!!!!!!1");
-				e1.printStackTrace();
-			}
-			rellenarTablaVuelos(flightList);
+			table =rellenarTablaVuelos(flightList);
+			this.scrollPane.add(table);
+			table.setVisible(true);
+
 
 		}else if(e.getSource().equals(btnLogIn)){
 			String email = txtUsuario.getText();
@@ -231,17 +234,17 @@ public class MainWindow extends JFrame implements ActionListener{
 				txtUsuario.setEditable(false);
 				txtPass.setEditable(false);
 				this.setTitle("Log in correct");
-				try{wait(3000);}catch(InterruptedException exception){
-					exception.printStackTrace();
-				}
-				this.setTitle("");
+//				try{wait(3000);}catch(InterruptedException exception){
+//					exception.printStackTrace();
+//				}
+//				this.setTitle("");
 
 			}else{
 				this.setTitle("Error in Log in");
-				try{wait(3000);}catch(InterruptedException exception){
-					exception.printStackTrace();
-				}
-				this.setTitle("");
+//				try{wait(3000);}catch(InterruptedException exception){
+//					exception.printStackTrace();
+//				}
+//				this.setTitle("");
 			}
 
 		}else if(e.getSource().equals(btnReservas)){
@@ -271,4 +274,5 @@ public class MainWindow extends JFrame implements ActionListener{
 
 		return Integer.toString(day)+"-"+Integer.toString(month)+"-"+Integer.toString(year);
 	}
+
 }
