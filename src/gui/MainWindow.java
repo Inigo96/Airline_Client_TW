@@ -49,6 +49,9 @@ public class MainWindow extends JFrame implements ActionListener{
 	private ArrayList<ReservationDTO> reservationList;
 
 	private JScrollPane scrollPane;
+	private int dia;
+	private int mes;
+	private int anyo;
 	final int numColumnasVuelos = 3;
 	private JTextField txtUsuario;
 	private JTextField txtPass;
@@ -223,8 +226,10 @@ public class MainWindow extends JFrame implements ActionListener{
 		user = controller.login(txtUsuario.getText(), txtPass.getText());
 		if(e.getSource().equals(btnBuscar)){
 			// conexion con los datos
-			flightList= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyoComBox.getSelectedIndex(), mesComBox.getSelectedIndex(),
-					 diaComBox.getSelectedIndex()));
+			anyo = anyoComBox.getSelectedIndex() + 2017;
+	      		mes = mesComBox.getSelectedIndex() + 1;
+     			dia = diaComBox.getSelectedIndex() + 1;
+			flightList= controller.searchFlight(txtOrigen.getText(), txtDestino.getText(), new GregorianCalendar(anyo, mes,dia));
 
 			System.out.println("flightList = " + flightList);
 			System.out.println("flightList = " + flightList.size());
